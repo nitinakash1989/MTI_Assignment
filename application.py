@@ -31,7 +31,14 @@ class PrettyWidget(QtWidgets.QWidget):
         self.figure = plt.figure(figsize=(15,5))    
         self.canvas = FigureCanvas(self.figure)     
         #self.toolbar = NavigationToolbar(self.canvas, self)
+        self.lblDistance = QtWidgets.QLabel()
+        self.lblMetadata = QtWidgets.QLabel()
+        self.lblCenter = QtWidgets.QLabel()
+        
         grid.addWidget(self.canvas, 2,0,1,2)
+        grid.addWidget(self.lblMetadata, 3,0)
+        grid.addWidget(self.lblDistance, 4,0)
+        grid.addWidget(self.lblCenter, 5,0)
         #grid.addWidget(self.toolbar, 1,0,1,2)
             
         #Import CSV Button
@@ -50,8 +57,9 @@ class PrettyWidget(QtWidgets.QWidget):
                                                        '*.txt')
         print("****")
         print(filePath[0])
-        df = load_data(filePath[0])
-        
+        tuple = load_data(filePath[0],True)
+        df = tuple[0]
+        metaData = tuple[1]
         #get distance and center for intersection
         
         distance,center, intersectLine, lowPoint, highPoint = getCenterAndDistance(filePath[0])
@@ -76,10 +84,14 @@ class PrettyWidget(QtWidgets.QWidget):
         
         ax.set_xlabel('Wavelength')
         ax.set_ylabel('Transmission')
-
+        
+        
         #plt(figure)' 
         self.canvas.draw()
-        
+        #metaData = "Testing"
+        self.lblMetadata.setText("Metadata: " + metaData)
+        self.lblDistance.setText("Distance: " + str(distance))
+        self.lblCenter.setText("Center:" + str(center))
         
         print(getCenterAndDistance(filePath[0]))
     
