@@ -5,8 +5,10 @@ Created on Thu Aug 16 02:21:40 2018
 @author: nitin
 """
 # Importing the libraries
+import numpy as np
 import pandas as pd
-
+import matplotlib.pyplot as plt
+import shapely.geometry as SG
 #Task-1
 
 def load_data(fileName, header=False):
@@ -15,9 +17,9 @@ def load_data(fileName, header=False):
     Parameters
     ----------
     fileName : str
-        The first parameter.
+        The first parameter: Name of the file
     header : bool
-        The second parameter.
+        The second parameter: Whether header should be returned or not.
 
     Returns
     if header == True:
@@ -37,3 +39,31 @@ def load_data(fileName, header=False):
         return(data)
     else:
         return(data, metadata)
+
+#Task 2
+def getCenterAndDistance(data):
+    """
+    Function to calculates the spectral position of the notch centre and the width of the 
+    notch at 50% transmission.
+    
+     ----------
+    data : dataframe
+        The data frane with only visible length frequency.
+
+    Returns
+    if header == True:
+        return tuple having distance and notch centre
+    """
+    x = list(data.iloc[:, 0].values)
+    y = list(data.iloc[:, 1].values)
+    center = data[data["Transmission"]==min(data["Transmission"])].iloc[0].at["Wavelength"]
+    line = SG.LineString(list(zip(x,y)))
+    intersectLine = data["Transmission"].median()/2
+    yline = SG.LineString([(min(x), intersectLine), (max(x), intersectLine)])
+    coords = np.array(line.intersection(yline))
+    intersectPoint = pd.Series(coords[:,0])
+    lowPoint = intersectPoint[intersectPoint<center].max()
+    highPoint = intersectPoint[intersectPoint>center].min()
+    distance = highPoint - lowPoint
+    print(distance)
+    return distance
