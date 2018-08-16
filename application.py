@@ -51,6 +51,11 @@ class PrettyWidget(QtWidgets.QWidget):
         print("****")
         print(filePath[0])
         df = load_data(filePath[0])
+        
+        #get distance and center for intersection
+        
+        
+        
         ax1 = self.figure.add_subplot(111)
         ax1.plot(df["Wavelength"], df["Transmission"])
         ax1.set_xlabel('Wavelength')
