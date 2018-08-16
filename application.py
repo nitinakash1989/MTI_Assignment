@@ -6,6 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from MTIAssignment import getCenterAndDistance, load_data
+
+
 
 class PrettyWidget(QtWidgets.QWidget):
    
@@ -23,9 +26,16 @@ class PrettyWidget(QtWidgets.QWidget):
         #Grid Layout
         grid = QtWidgets.QGridLayout()
         self.setLayout(grid)
-                    
+        
+        #Canvas and Toolbar
+        self.figure = plt.figure(figsize=(15,5))    
+        self.canvas = FigureCanvas(self.figure)     
+        #self.toolbar = NavigationToolbar(self.canvas, self)
+        grid.addWidget(self.canvas, 2,0,1,2)
+        #grid.addWidget(self.toolbar, 1,0,1,2)
+            
         #Import CSV Button
-        btn1 = QtWidgets.QPushButton('Import CSV', self)
+        btn1 = QtWidgets.QPushButton('Import text file', self)
         btn1.resize(btn1.sizeHint()) 
         btn1.clicked.connect(self.getCSV)
         grid.addWidget(btn1, 0,0)
@@ -37,7 +47,23 @@ class PrettyWidget(QtWidgets.QWidget):
         filePath = QtWidgets.QFileDialog.getOpenFileName(self, 
                                                        'Single File',
                                                        '~/Desktop/PyRevolution/PyQt4',
-                                                       '*.csv')
+                                                       '*.txt')
+        print("****")
+        print(filePath[0])
+        df = load_data(filePath[0])
+        ax1 = self.figure.add_subplot(111)
+        ax1.plot(df["Wavelength"], df["Transmission"])
+        ax1.set_xlabel('Wavelength')
+        ax1.set_ylabel('Transmission')
+
+        #plt(figure)' 
+        self.canvas.draw()
+        
+        
+        print(getCenterAndDistance(filePath[0]))
+    
+        print("*****")
+        """
         fileHandle = open(filePath, 'r')
         line = fileHandle.readline()[:-1].split(',')
         for n, val in enumerate(line):
@@ -45,7 +71,7 @@ class PrettyWidget(QtWidgets.QWidget):
             self.table.setItem(0, n, newitem)
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()    
-    
+    """
     
     def plot(self):
         y = []
