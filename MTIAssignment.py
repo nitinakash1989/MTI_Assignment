@@ -67,4 +67,4 @@ def getCenterAndDistance(fileName):
     highPoint = intersectPoint[intersectPoint>center].min()
     distance = highPoint - lowPoint
     print(distance)
-    return distance
+    return(distance,center)
