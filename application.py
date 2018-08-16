@@ -1,11 +1,10 @@
 
 #Importing library
-from PyQt5 import QtGui, QtWidgets
-import os, sys
+from PyQt5 import QtWidgets
+import  sys
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from MTIAssignment import getCenterAndDistance, load_data
 
 import shapely.geometry as SG
@@ -55,8 +54,7 @@ class PrettyWidget(QtWidgets.QWidget):
                                                        'Single File',
                                                        '~/Desktop/PyRevolution/PyQt4',
                                                        '*.txt')
-        print("****")
-        print(filePath[0])
+        
         tuple = load_data(filePath[0],True)
         df = tuple[0]
         metaData = tuple[1]
@@ -85,26 +83,12 @@ class PrettyWidget(QtWidgets.QWidget):
         ax.set_xlabel('Wavelength')
         ax.set_ylabel('Transmission')
         
-        
-        #plt(figure)' 
+         
         self.canvas.draw()
-        #metaData = "Testing"
         self.lblMetadata.setText("Metadata: " + metaData)
         self.lblDistance.setText("Distance: " + str(distance))
         self.lblCenter.setText("Center:" + str(center))
         
-        print(getCenterAndDistance(filePath[0]))
-    
-        print("*****")
-        """
-        fileHandle = open(filePath, 'r')
-        line = fileHandle.readline()[:-1].split(',')
-        for n, val in enumerate(line):
-            newitem = QtWidgets.QTableWidgetItem(val)
-            self.table.setItem(0, n, newitem)
-        self.table.resizeColumnsToContents()
-        self.table.resizeRowsToContents()    
-    """
     
     def plot(self):
         y = []
