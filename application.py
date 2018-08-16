@@ -8,7 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from MTIAssignment import getCenterAndDistance, load_data
 
-
+import shapely.geometry as SG
 
 class PrettyWidget(QtWidgets.QWidget):
    
@@ -54,12 +54,22 @@ class PrettyWidget(QtWidgets.QWidget):
         
         #get distance and center for intersection
         
+        distance,center, intersectLine, lowPoint, highPoint = getCenterAndDistance(filePath[0])
+        x = list(df.iloc[:, 0].values)
+        y = list(df.iloc[:, 1].values)
         
+        line = SG.LineString(list(zip(x,y)))
         
-        ax1 = self.figure.add_subplot(111)
-        ax1.plot(df["Wavelength"], df["Transmission"])
-        ax1.set_xlabel('Wavelength')
-        ax1.set_ylabel('Transmission')
+        yline = SG.LineString([(min(x), intersectLine), (max(x), intersectLine)])
+        coords = np.array(line.intersection(yline))
+        
+        ax = self.figure.add_subplot(111)
+        ax.axhline(y=intersectLine, color='k', linestyle='--')
+        ax.plot(x, y, 'b-')
+        ax.scatter(coords[:, 0], coords[:, 1], s=50, c='red')
+       
+        ax.set_xlabel('Wavelength')
+        ax.set_ylabel('Transmission')
 
         #plt(figure)' 
         self.canvas.draw()
