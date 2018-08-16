@@ -41,7 +41,7 @@ def load_data(fileName, header=False):
         return(data, metadata)
 
 #Task 2
-def getCenterAndDistance(data):
+def getCenterAndDistance(fileName):
     """
     Function to calculates the spectral position of the notch centre and the width of the 
     notch at 50% transmission.
@@ -54,6 +54,7 @@ def getCenterAndDistance(data):
     if header == True:
         return tuple having distance and notch centre
     """
+    data= load_data(fileName, header=False)
     x = list(data.iloc[:, 0].values)
     y = list(data.iloc[:, 1].values)
     center = data[data["Transmission"]==min(data["Transmission"])].iloc[0].at["Wavelength"]
