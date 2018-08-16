@@ -21,7 +21,7 @@ class PrettyWidget(QtWidgets.QWidget):
     def initUI(self):
         self.setGeometry(600,300, 1000, 600)
         self.center()
-        self.setWindowTitle('Revision on Plots, Tables and File Browser')     
+        self.setWindowTitle('MTI GUI')     
         
         #Grid Layout
         grid = QtWidgets.QGridLayout()
