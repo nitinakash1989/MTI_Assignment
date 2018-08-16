@@ -61,6 +61,7 @@ class PrettyWidget(QtWidgets.QWidget):
         line = SG.LineString(list(zip(x,y)))
         
         yline = SG.LineString([(min(x), intersectLine), (max(x), intersectLine)])
+    
         coords = np.array(line.intersection(yline))
         
         ax = self.figure.add_subplot(111)
@@ -68,6 +69,11 @@ class PrettyWidget(QtWidgets.QWidget):
         ax.plot(x, y, 'b-')
         ax.scatter(coords[:, 0], coords[:, 1], s=50, c='red')
        
+        ax.axvline(x=lowPoint, color='k', linestyle='--')
+        ax.plot(x, y, 'y-')
+        ax.axvline(x=highPoint, color='k', linestyle='--')
+        ax.plot(x, y, 'p-')
+        
         ax.set_xlabel('Wavelength')
         ax.set_ylabel('Transmission')
 
