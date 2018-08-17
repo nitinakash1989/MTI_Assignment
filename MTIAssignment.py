@@ -33,7 +33,9 @@ def load_data(fileName, header=False):
 
     data = pd.read_csv(fileName, skiprows=4, sep='\t', header = None,
                    names = ["Wavelength","Transmission"])
-
+    data = data.dropna()
+    data = data.apply(pd.to_numeric, errors='ignore')
+    
     data = data[(data['Wavelength']>=390) & (data['Wavelength']<=700)]
     if(header==False):
         return(data)
@@ -62,9 +64,15 @@ def getCenterAndDistance(fileName):
     intersectLine = data["Transmission"].median()/2
     yline = SG.LineString([(min(x), intersectLine), (max(x), intersectLine)])
     coords = np.array(line.intersection(yline))
-    intersectPoint = pd.Series(coords[:,0])
-    lowPoint = intersectPoint[intersectPoint<center].max()
-    highPoint = intersectPoint[intersectPoint>center].min()
-    distance = highPoint - lowPoint
+    if coords.size==0:
+        intersectPoint = 0
+        lowPoint = 0
+        highPoint = 0
+        distance = 0
+    else:
+        intersectPoint = pd.Series(coords[:,0])
+        lowPoint = intersectPoint[intersectPoint<center].max()
+        highPoint = intersectPoint[intersectPoint>center].min()
+        distance = highPoint - lowPoint
     print(distance)
     return(distance,center, intersectLine, lowPoint, highPoint)

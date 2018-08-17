@@ -59,7 +59,7 @@ class PrettyWidget(QtWidgets.QWidget):
         df = tuple[0]
         metaData = tuple[1]
         #get distance and center for intersection
-        
+        print(getCenterAndDistance(filePath[0]))
         distance,center, intersectLine, lowPoint, highPoint = getCenterAndDistance(filePath[0])
         x = list(df.iloc[:, 0].values)
         y = list(df.iloc[:, 1].values)
@@ -73,7 +73,8 @@ class PrettyWidget(QtWidgets.QWidget):
         ax = self.figure.add_subplot(111)
         ax.axhline(y=intersectLine, color='k', linestyle='--')
         ax.plot(x, y, 'b-')
-        ax.scatter(coords[:, 0], coords[:, 1], s=50, c='red')
+        if coords.size !=0:
+            ax.scatter(coords[:, 0], coords[:, 1], s=50, c='red')
        
         ax.axvline(x=lowPoint, color='k', linestyle='--')
         ax.plot(x, y, 'y-')
